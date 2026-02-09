@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quizle.Data;
-using Quizle.Data.Entities;
+using Quizle.Infrastructure.Data.Entities;
 
 namespace Quizle
 {

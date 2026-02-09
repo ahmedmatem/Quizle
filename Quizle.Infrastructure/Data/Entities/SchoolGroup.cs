@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Quizle.Data.Entities
+namespace Quizle.Infrastructure.Data.Entities
 {
     public class SchoolGroup
     {

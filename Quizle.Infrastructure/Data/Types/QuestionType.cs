@@ -1,4 +1,4 @@
-﻿namespace Quizle.Data.Types
+﻿namespace Quizle.Infrastructure.Data.Types
 {
     public enum QuestionType
     {

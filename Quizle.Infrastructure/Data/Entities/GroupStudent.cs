@@ -1,4 +1,4 @@
-﻿namespace Quizle.Data.Entities
+﻿namespace Quizle.Infrastructure.Data.Entities
 {
     public class GroupStudent
     {

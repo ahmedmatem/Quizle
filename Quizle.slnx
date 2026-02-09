@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="Quizle/Quizle.csproj" />
+  <Project Path="Quizle.Core/Quizle.Core.csproj" Id="2142461f-8a97-402a-8ba2-e402aabee44a" />
+  <Project Path="Quizle.Infrastructure/Quizle.Infrastructure.csproj" Id="4bb15b1a-389a-4636-8092-ee6a30ff265c" />
+  <Project Path="Quizle/Quizle.Web.csproj" />
 </Solution>

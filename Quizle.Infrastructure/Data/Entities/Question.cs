@@ -1,8 +1,8 @@
-﻿using Quizle.Data.Types;
+﻿using Quizle.Infrastructure.Data.Types;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Quizle.Data.Entities
+namespace Quizle.Infrastructure.Data.Entities
 {
     public class Question
     {
