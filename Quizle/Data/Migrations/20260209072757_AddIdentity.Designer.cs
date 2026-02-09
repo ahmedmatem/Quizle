@@ -12,7 +12,7 @@ using Quizle.Data;
 namespace Quizle.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260204101417_AddIdentity")]
+    [Migration("20260209072757_AddIdentity")]
     partial class AddIdentity
     {
         /// <inheritdoc />

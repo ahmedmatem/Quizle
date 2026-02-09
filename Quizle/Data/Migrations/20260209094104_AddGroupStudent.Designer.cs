@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Quizle.Data;
 
@@ -11,9 +12,11 @@ using Quizle.Data;
 namespace Quizle.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260209094104_AddGroupStudent")]
+    partial class AddGroupStudent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,23 +177,6 @@ namespace Quizle.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("QuizQuestion", b =>
-                {
-                    b.Property<string>("QuizId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("QuestionId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("QuizId", "QuestionId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("QuizQuestions", (string)null);
-                });
-
             modelBuilder.Entity("Quizle.Data.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -260,120 +246,6 @@ namespace Quizle.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Quizle.Data.Entities.ChoiceOption", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("ChoiceOptions");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.Question", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal?>("CorrectNumeric")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("CorrectOptionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("NumericTolerance")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.Quiz", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("ActiveFromUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DurationMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SchoolGroupId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolGroupId");
-
-                    b.ToTable("Quizzes");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.QuizAttempt", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("MaxScore")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QuizId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("SubmittedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuizId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("QuizAttempts");
-                });
-
             modelBuilder.Entity("Quizle.Data.Entities.SchoolGroup", b =>
                 {
                     b.Property<string>("Id")
@@ -390,42 +262,7 @@ namespace Quizle.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SchoolGroups");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.StudentAnswer", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("AwardedPoints")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("NumericValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("QuizAttemptId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SelectedOptionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TextValue")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("QuizAttemptId");
-
-                    b.ToTable("StudentAnswers");
+                    b.ToTable("SchoolGroup");
                 });
 
             modelBuilder.Entity("GroupStudent", b =>
@@ -439,7 +276,7 @@ namespace Quizle.Data.Migrations
                     b.HasOne("Quizle.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -492,106 +329,6 @@ namespace Quizle.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("QuizQuestion", b =>
-                {
-                    b.HasOne("Quizle.Data.Entities.Question", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Quizle.Data.Entities.Quiz", null)
-                        .WithMany()
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.ChoiceOption", b =>
-                {
-                    b.HasOne("Quizle.Data.Entities.Question", "Question")
-                        .WithMany("Options")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.Quiz", b =>
-                {
-                    b.HasOne("Quizle.Data.Entities.SchoolGroup", "SchoolGroup")
-                        .WithMany("Quizzes")
-                        .HasForeignKey("SchoolGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SchoolGroup");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.QuizAttempt", b =>
-                {
-                    b.HasOne("Quizle.Data.Entities.Quiz", "Quiz")
-                        .WithMany("QuizAttempts")
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Quizle.Data.Entities.ApplicationUser", "Student")
-                        .WithMany("QuizAttempts")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Quiz");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.StudentAnswer", b =>
-                {
-                    b.HasOne("Quizle.Data.Entities.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Quizle.Data.Entities.QuizAttempt", "QuizAttempt")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuizAttemptId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-
-                    b.Navigation("QuizAttempt");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.ApplicationUser", b =>
-                {
-                    b.Navigation("QuizAttempts");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.Question", b =>
-                {
-                    b.Navigation("Options");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.Quiz", b =>
-                {
-                    b.Navigation("QuizAttempts");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.QuizAttempt", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.SchoolGroup", b =>
-                {
-                    b.Navigation("Quizzes");
                 });
 #pragma warning restore 612, 618
         }

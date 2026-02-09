@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Quizle.Data;
 
@@ -11,9 +12,11 @@ using Quizle.Data;
 namespace Quizle.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260209181046_AddQuizAttempt")]
+    partial class AddQuizAttempt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -393,41 +396,6 @@ namespace Quizle.Data.Migrations
                     b.ToTable("SchoolGroups");
                 });
 
-            modelBuilder.Entity("Quizle.Data.Entities.StudentAnswer", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("AwardedPoints")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("NumericValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("QuizAttemptId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SelectedOptionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TextValue")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("QuizAttemptId");
-
-                    b.ToTable("StudentAnswers");
-                });
-
             modelBuilder.Entity("GroupStudent", b =>
                 {
                     b.HasOne("Quizle.Data.Entities.SchoolGroup", null)
@@ -550,25 +518,6 @@ namespace Quizle.Data.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Quizle.Data.Entities.StudentAnswer", b =>
-                {
-                    b.HasOne("Quizle.Data.Entities.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Quizle.Data.Entities.QuizAttempt", "QuizAttempt")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuizAttemptId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-
-                    b.Navigation("QuizAttempt");
-                });
-
             modelBuilder.Entity("Quizle.Data.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("QuizAttempts");
@@ -582,11 +531,6 @@ namespace Quizle.Data.Migrations
             modelBuilder.Entity("Quizle.Data.Entities.Quiz", b =>
                 {
                     b.Navigation("QuizAttempts");
-                });
-
-            modelBuilder.Entity("Quizle.Data.Entities.QuizAttempt", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("Quizle.Data.Entities.SchoolGroup", b =>
