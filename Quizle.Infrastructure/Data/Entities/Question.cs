@@ -23,10 +23,11 @@ namespace Quizle.Infrastructure.Data.Entities
 
         // За MultipleChoice:
         public string? CorrectOptionId { get; set; }
+        public ChoiceOption? CorrectOption { get; set; }
 
         // Navigation properties
 
-        public ICollection<Quiz> Quizzes { get; set; } = [];
+        public ICollection<QuizQuestion> QuizQuestions { get; set; } = [];
 
         public ICollection<ChoiceOption> Options { get; set; } = [];
     }

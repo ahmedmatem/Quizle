@@ -16,6 +16,7 @@ namespace Quizle.Infrastructure.Data.Entities
 
         // За MultipleChoice:
         public string? SelectedOptionId { get; set; }
+        public ChoiceOption? SelectedOption { get; set; }
 
         // За Numeric:
         public decimal? NumericValue { get; set; }

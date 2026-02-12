@@ -17,10 +17,42 @@ namespace Quizle.Data
         public DbSet<ChoiceOption> ChoiceOptions { get; set; }
         public DbSet<QuizAttempt> QuizAttempts { get; set; }
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
+        public DbSet<QuizQuestion> QuizQuestions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            // StudentAnswer -> SelectedOption (nullable FK)
+            builder.Entity<StudentAnswer>()
+                .HasOne(sa => sa.SelectedOption)
+                .WithMany() // няма нужда от обратна навигация
+                .HasForeignKey(sa => sa.SelectedOptionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<StudentAnswer>()
+                .HasIndex(sa => new { sa.QuizAttemptId, sa.QuestionId })
+                .IsUnique();
+            builder.Entity<StudentAnswer>()
+                .HasIndex(sa => sa.QuizAttemptId);
+
+            builder.Entity<QuizAttempt>()
+                .HasIndex(a => new { a.QuizId, a.StudentId })
+                .IsUnique();
+
+            // Question -> Options (1:N)
+            builder.Entity<ChoiceOption>()
+                .HasOne(o => o.Question)
+                .WithMany(q => q.Options)
+                .HasForeignKey(o => o.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Question -> CorrectOption (nullable FK) (separate relationship)
+            builder.Entity<Question>()
+                .HasOne(q => q.CorrectOption)
+                .WithMany() // няма обратна навигация (важно)
+                .HasForeignKey(q => q.CorrectOptionId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<SchoolGroup>()
                 .HasMany(g => g.Students)
@@ -30,7 +62,7 @@ namespace Quizle.Data
                     r => r.HasOne<ApplicationUser>()
                           .WithMany()
                           .HasForeignKey("StudentId")
-                          .OnDelete(DeleteBehavior.Cascade),
+                          .OnDelete(DeleteBehavior.NoAction),
                     l => l.HasOne<SchoolGroup>()
                           .WithMany()
                           .HasForeignKey("GroupId")
@@ -38,30 +70,30 @@ namespace Quizle.Data
                     j =>
                     {
                         j.HasKey("GroupId", "StudentId");
+                        j.HasIndex("GroupId");
                         j.HasIndex("StudentId");
                         j.ToTable("GroupStudents");
                     });
 
-            builder.Entity<Quiz>()
-                .HasMany(qz => qz.Questions)
-                .WithMany(q => q.Quizzes)
-                .UsingEntity<Dictionary<string, object>>(
-                    "QuizQuestion",
-                    r => r.HasOne<Question>()
-                          .WithMany()
-                          .HasForeignKey("QuestionId")
-                          .OnDelete(DeleteBehavior.Cascade),
-                    
-                    l => l.HasOne<Quiz>()
-                          .WithMany()
-                          .HasForeignKey("QuizId")
-                          .OnDelete(DeleteBehavior.Cascade),
-                    j =>
-                    {
-                        j.HasKey("QuizId", "QuestionId");
-                        j.HasIndex("QuizId");
-                        j.ToTable("QuizQuestions");
-                    });
+            builder.Entity<QuizQuestion>(e =>
+            {
+                e.ToTable("QuizQuestions");
+
+                e.HasKey(x => new { x.QuizId, x.QuestionId });
+
+                e.HasOne(x => x.Quiz)
+                    .WithMany(q => q.QuizQuestions)
+                    .HasForeignKey(x => x.QuizId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne(x => x.Question)
+                    .WithMany(q => q.QuizQuestions)
+                    .HasForeignKey(x => x.QuestionId)
+                    .OnDelete(DeleteBehavior.NoAction); // safer if Questions are reused
+
+                e.HasIndex(x => new { x.QuizId, x.Order }).IsUnique(); // fast order queries
+
+            });
         }
     }
 }

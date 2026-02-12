@@ -23,10 +23,12 @@ namespace Quizle.Infrastructure.Data.Entities
 
         public DateTime? ActiveFromUtc { get; set; } // когато учителят го активира
 
+        public DateTime? ActiveUntilUtc { get; set; }
+
         // Navigation properties
 
         public SchoolGroup SchoolGroup { get; set; } = null!;
-        public ICollection<Question> Questions { get; set; } = [];
+        public ICollection<QuizQuestion> QuizQuestions { get; set; } = [];
         public ICollection<QuizAttempt> QuizAttempts { get; set; } = [];
     }
 }
