@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Quizle.Infrastructure.Data.Abstracts;
+using System.ComponentModel.DataAnnotations;
 
 namespace Quizle.Infrastructure.Data.Entities
 {
-    public class SchoolGroup
+    public class SchoolGroup : SoftDeletableEntity
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();

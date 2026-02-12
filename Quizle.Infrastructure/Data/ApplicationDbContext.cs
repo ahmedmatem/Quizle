@@ -108,6 +108,9 @@ namespace Quizle.Data
                 e.HasIndex(x => new { x.QuizId, x.Order }).IsUnique(); // fast order queries
 
             });
+
+            builder.Entity<Quiz>().HasIndex(x => x.IsDeleted);
+            builder.Entity<Question>().HasIndex(x => x.IsDeleted);
         }
 
         public override int SaveChanges()
