@@ -110,6 +110,31 @@ namespace Quizle.Data
             });
         }
 
+        public override int SaveChanges()
+        {
+            ConvertHardDeletesToSoftDeletes();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ConvertHardDeletesToSoftDeletes();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void ConvertHardDeletesToSoftDeletes()
+        {
+            var entries = ChangeTracker.Entries<ISoftDeletable>()
+                .Where(e => e.State == EntityState.Deleted);
+
+            foreach (var entry in entries)
+            {
+                entry.State = EntityState.Modified;
+                entry.Entity.IsDeleted = true;
+                entry.Entity.DeletedOnUtc = DateTime.UtcNow;
+            }
+        }
+
         private static void SetSoftDeleteFilter<TEntity>(ModelBuilder builder)
             where TEntity : class, ISoftDeletable
         {
