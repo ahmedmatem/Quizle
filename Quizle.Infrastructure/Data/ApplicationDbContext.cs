@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Quizle.Infrastructure.Data.Abstracts;
 using Quizle.Infrastructure.Data.Entities;
 
 namespace Quizle.Data
@@ -22,6 +23,19 @@ namespace Quizle.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            // Apply global filter to all entities implementing ISoftDeletable
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+                {
+                    var method = typeof(ApplicationDbContext)
+                        .GetMethod(nameof(SetSoftDeleteFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!
+                        .MakeGenericMethod(entityType.ClrType);
+
+                    method.Invoke(null, new object[] { builder });
+                }
+            }
 
             // StudentAnswer -> SelectedOption (nullable FK)
             builder.Entity<StudentAnswer>()
@@ -94,6 +108,12 @@ namespace Quizle.Data
                 e.HasIndex(x => new { x.QuizId, x.Order }).IsUnique(); // fast order queries
 
             });
+        }
+
+        private static void SetSoftDeleteFilter<TEntity>(ModelBuilder builder)
+            where TEntity : class, ISoftDeletable
+        {
+            builder.Entity<TEntity>().HasQueryFilter(e => !e.IsDeleted);
         }
     }
 }
