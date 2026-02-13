@@ -12,21 +12,10 @@ namespace Quizle
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            builder.Services.AddApplicationDbContext(builder.Configuration);
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireDigit = false;
-            })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddApplicationIdentity();
             builder.Services.AddControllersWithViews();
-
             builder.Services.AddApplicationServices();
 
             var app = builder.Build();

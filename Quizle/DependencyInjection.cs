@@ -1,4 +1,7 @@
-﻿using Quizle.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using Quizle.Core.Contracts;
+using Quizle.Core.Entities;
+using Quizle.Infrastructure.Data;
 using Quizle.Infrastructure.Data.Repositories;
 
 namespace Quizle.Web
@@ -7,9 +10,32 @@ namespace Quizle.Web
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IQuizRepository, IQuizRepository>();
+            services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<ISchoolGroupRepository, SchoolGroupRepository>();
             services.AddScoped<IQuizAttemptRepository, QuizAttemptRepository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)
+        {
+            var connectionString = config.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            return services;
+        }
+
+        public static IServiceCollection AddApplicationIdentity(this IServiceCollection services)
+        {
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             return services;
         }
