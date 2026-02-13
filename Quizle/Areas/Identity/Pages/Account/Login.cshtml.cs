@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Quizle.Infrastructure.Data.Entities;
+using Quizle.Core.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Quizle.Areas.Identity.Pages.Account

@@ -1,8 +1,8 @@
-﻿using Quizle.Infrastructure.Data.Abstracts;
+﻿using Quizle.Core.Abstracts;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Quizle.Infrastructure.Data.Entities
+namespace Quizle.Core.Entities
 {
     public class ChoiceOption : SoftDeletableEntity
     {

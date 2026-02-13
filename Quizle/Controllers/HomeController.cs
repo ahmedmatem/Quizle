@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Quizle.Models;
+using Quizle.Web.Models;
 
-namespace Quizle.Controllers
+namespace Quizle.Web.Controllers
 {
     public class HomeController : Controller
     {

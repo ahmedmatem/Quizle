@@ -1,4 +1,4 @@
-﻿namespace Quizle.Infrastructure.Data.Abstracts
+﻿namespace Quizle.Core.Abstracts
 {
     public interface ISoftDeletable
     {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Quizle.Infrastructure.Data.Abstracts;
+using Quizle.Core.Abstracts;
 using Quizle.Infrastructure.Data.Configurations;
-using Quizle.Infrastructure.Data.Entities;
+using Quizle.Core.Entities;
 
-namespace Quizle.Data
+namespace Quizle.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

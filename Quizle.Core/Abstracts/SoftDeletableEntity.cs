@@ -1,5 +1,5 @@
 ﻿
-namespace Quizle.Infrastructure.Data.Abstracts
+namespace Quizle.Core.Abstracts
 {
     public abstract class SoftDeletableEntity : ISoftDeletable
     {

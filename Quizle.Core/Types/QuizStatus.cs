@@ -1,4 +1,4 @@
-﻿namespace Quizle.Infrastructure.Data.Types
+﻿namespace Quizle.Core.Types
 {
     public enum QuizStatus
     {

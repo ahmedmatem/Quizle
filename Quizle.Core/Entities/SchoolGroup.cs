@@ -1,7 +1,7 @@
-﻿using Quizle.Infrastructure.Data.Abstracts;
+﻿using Quizle.Core.Abstracts;
 using System.ComponentModel.DataAnnotations;
 
-namespace Quizle.Infrastructure.Data.Entities
+namespace Quizle.Core.Entities
 {
     public class SchoolGroup : SoftDeletableEntity
     {

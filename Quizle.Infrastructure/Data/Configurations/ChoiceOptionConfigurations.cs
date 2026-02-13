@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Quizle.Infrastructure.Data.Entities;
+using Quizle.Core.Entities;
 
 namespace Quizle.Infrastructure.Data.Configurations
 {

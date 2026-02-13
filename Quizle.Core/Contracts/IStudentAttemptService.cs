@@ -1,0 +1,11 @@
+﻿using Quizle.Core.Dtos;
+using Quizle.Core.Entities;
+
+namespace Quizle.Core.Contracts
+{
+    public interface IStudentAttemptService
+    {
+        public Task<QuizAttempt> StartOrGetAttemptAsync(string quizId, string studentId, CancellationToken ct);
+        public Task<SolveQuestionDto> GetSolveVmAsync(string attemptId, int index, CancellationToken ct);
+    }
+}

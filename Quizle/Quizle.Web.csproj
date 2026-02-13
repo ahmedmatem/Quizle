@@ -8,6 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Student\**" />
+    <Compile Remove="Areas\Teacher\**" />
+    <Content Remove="Areas\Student\**" />
+    <Content Remove="Areas\Teacher\**" />
+    <EmbeddedResource Remove="Areas\Student\**" />
+    <EmbeddedResource Remove="Areas\Teacher\**" />
+    <None Remove="Areas\Student\**" />
+    <None Remove="Areas\Teacher\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Areas\Student\Models\OptionVm.cs" />
+    <Compile Include="Areas\Student\Models\SaveAnswerReq.cs" />
+    <Compile Include="Areas\Student\Models\SolveQuestionVm.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.23" />
@@ -19,17 +36,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Quizle.Core\Quizle.Core.csproj" />
+    <ProjectReference Include="..\Quizle.Infrastructure\Quizle.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\Student\Controllers\" />
     <Folder Include="Areas\Student\Data\" />
-    <Folder Include="Areas\Student\Models\" />
-    <Folder Include="Areas\Student\Views\" />
-    <Folder Include="Areas\Teacher\Controllers\" />
-    <Folder Include="Areas\Teacher\Data\" />
-    <Folder Include="Areas\Teacher\Models\" />
-    <Folder Include="Areas\Teacher\Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Student\Views\_ViewImports.cshtml" />
   </ItemGroup>
 
 </Project>

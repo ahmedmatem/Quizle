@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace Quizle.Infrastructure.Data.Entities
+namespace Quizle.Core.Entities
 {
     public class ApplicationUser : IdentityUser
     {

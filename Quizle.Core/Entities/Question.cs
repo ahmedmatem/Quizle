@@ -1,8 +1,8 @@
-﻿using Quizle.Infrastructure.Data.Abstracts;
-using Quizle.Infrastructure.Data.Types;
+﻿using Quizle.Core.Abstracts;
+using Quizle.Core.Types;
 using System.ComponentModel.DataAnnotations;
 
-namespace Quizle.Infrastructure.Data.Entities
+namespace Quizle.Core.Entities
 {
     public class Question : SoftDeletableEntity
     {
