@@ -10,9 +10,12 @@ namespace Quizle.Web
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            // Register repositories
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<ISchoolGroupRepository, SchoolGroupRepository>();
             services.AddScoped<IQuizAttemptRepository, QuizAttemptRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IStudentAnswerRepository, StudentAnswerRepository>();
 
             return services;
         }

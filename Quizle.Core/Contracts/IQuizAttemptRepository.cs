@@ -6,6 +6,8 @@ namespace Quizle.Core.Contracts
     {
         Task<QuizAttempt?> GetAsync(string quizId, string studentId, CancellationToken ct);
 
-        Task<int> CreateAsync(QuizAttempt attempt);
+        Task<int> CreateAsync(QuizAttempt attempt, CancellationToken ct);
+
+        Task<QuizAttempt?> GetWithQuizAsync(string attemptId, CancellationToken ct);
     }
 }
