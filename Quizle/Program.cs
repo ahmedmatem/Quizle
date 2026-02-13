@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Quizle.Core.Entities;
 using Quizle.Infrastructure.Data;
+using Quizle.Web;
 
 namespace Quizle
 {
@@ -25,6 +26,8 @@ namespace Quizle
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddApplicationServices();
 
             var app = builder.Build();
 
