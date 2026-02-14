@@ -23,6 +23,7 @@
     <Compile Include="Areas\Student\Models\OptionVm.cs" />
     <Compile Include="Areas\Student\Models\SaveAnswerReq.cs" />
     <Compile Include="Areas\Student\Models\SolveQuestionVm.cs" />
+    <Compile Include="Areas\Student\Models\StudentDashboardVm.cs" />
   </ItemGroup>
 
   <ItemGroup>
