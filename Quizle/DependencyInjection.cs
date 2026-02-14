@@ -16,6 +16,7 @@ namespace Quizle.Web
             services.AddScoped<IQuizAttemptRepository, QuizAttemptRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IStudentAnswerRepository, StudentAnswerRepository>();
+            services.AddScoped<IChoiceOptionRepository, ChoiceOptionRepository>();
 
             return services;
         }

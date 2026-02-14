@@ -18,6 +18,9 @@ namespace Quizle.Infrastructure.Data.Repositories
             .ToListAsync(ct);
 
         public async Task<Question> GetWithOptionsAsync(string questionId, CancellationToken ct)
-            => await _db.Questions.Include(q => q.Options).FirstAsync(q => q.Id == questionId);
+            => await _db.Questions.Include(q => q.Options).FirstAsync(q => q.Id == questionId, ct);
+
+        public async Task<bool> BelongsToQuizAsync(string quizId, string questionId, CancellationToken ct)
+            => await _db.QuizQuestions.AnyAsync(qq => qq.QuizId == quizId && qq.QuestionId == questionId, ct);
     }
 }

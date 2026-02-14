@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Quizle.Core.Contracts;
+﻿using Quizle.Core.Contracts;
 using Quizle.Core.Dtos;
 using Quizle.Core.Entities;
 using Quizle.Core.Types;
@@ -13,19 +12,22 @@ namespace Quizle.Core.Services
         private readonly IQuizAttemptRepository _attemptRepository;
         private readonly IQuestionRepository _questionRepository;
         private readonly IStudentAnswerRepository _studentAnswerRepository;
+        private readonly IChoiceOptionRepository _choiceOptionRepository;
 
         public StudentAttemptService(
             IQuizRepository quizRepository,
             ISchoolGroupRepository groupRepository,
             IQuizAttemptRepository attemptRepository,
             IQuestionRepository questionRepository,
-            IStudentAnswerRepository studentAnswerRepository)
+            IStudentAnswerRepository studentAnswerRepository,
+            IChoiceOptionRepository choiceOptionRepository)
         {
             _quizRepository = quizRepository;
             _groupRepository = groupRepository;
             _attemptRepository = attemptRepository;
             _questionRepository = questionRepository;
             _studentAnswerRepository = studentAnswerRepository;
+            _choiceOptionRepository = choiceOptionRepository;
         }
 
         public async Task<SolveQuestionDto> GetSolveVmAsync(string attemptId, int index, CancellationToken ct)
@@ -79,6 +81,39 @@ namespace Quizle.Core.Services
                 NumericValue = existingAnswer?.NumericValue,
                 TextValue = existingAnswer?.TextValue
             };
+        }
+
+        public async Task SaveAnswerAsync(string studentId, SaveAnswerDto req, CancellationToken ct)
+        {
+            var attempt = await _attemptRepository.GetWithQuizAsync(req.AttemptId, ct);
+            
+            if (attempt == null) throw new InvalidOperationException("Attempt not found.");
+            if (attempt.StudentId != studentId) 
+                throw new InvalidOperationException("Forbidden.");
+            if (attempt.SubmittedAtUtc != null) 
+                throw new InvalidOperationException("Attempt already submitted.");
+
+            var quiz = attempt.Quiz;
+            if (quiz.Status != QuizStatus.Active) 
+                throw new InvalidOperationException("Quiz not active.");
+            if (!quiz.ActiveUntilUtc.HasValue) 
+                throw new InvalidOperationException("Quiz has no end time.");
+            if (DateTime.UtcNow > quiz.ActiveUntilUtc.Value) 
+                throw new InvalidOperationException("Quiz ended.");
+
+            // validate question belongs to quiz
+            var belongs = await _questionRepository.BelongsToQuizAsync(quiz.Id, req.QuestionId, ct);
+            if (!belongs) throw new InvalidOperationException("Invalid question for this quiz.");
+
+            // If SelectedOptionId is provided, validate it belongs to this question
+            if (!string.IsNullOrWhiteSpace(req.SelectedOptionId))
+            {
+                var optionOk = await _choiceOptionRepository.BelongsToQuestion(req.QuestionId, req.SelectedOptionId, ct);
+                if (!optionOk) throw new InvalidOperationException("Invalid option for this question.");
+            }
+
+            // UPSERT by (AttemptId, QuestionId) — works with unique index
+            await _studentAnswerRepository.Upsert(req, ct);
         }
 
         public async Task<QuizAttempt> StartOrGetAttemptAsync(string quizId, string studentId, CancellationToken ct)
