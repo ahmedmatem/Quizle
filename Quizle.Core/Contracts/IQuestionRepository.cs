@@ -7,5 +7,6 @@ namespace Quizle.Core.Contracts
         Task<Question> GetWithOptionsAsync(string questionId, CancellationToken ct);
         Task<List<string>> GetOrderedQuestionsAsync(string quizId, CancellationToken ct);
         Task<bool> BelongsToQuizAsync(string quizId, string questionId, CancellationToken ct);
+        Task<Dictionary<string, Question>> GetAllAsync(List<string> questionIds, CancellationToken ct);
     }
 }

@@ -154,5 +154,65 @@ namespace Quizle.Core.Services
 
             return attempt;
         }
+
+        public async Task SubmitAsync(string studentId, string attemptId, CancellationToken ct)
+        {
+            var attempt = await _attemptRepository.GetWithQuizAsync(attemptId, ct);
+            
+            if (attempt == null) throw new InvalidOperationException("Attempt not found.");
+            if (attempt.StudentId != studentId) throw new InvalidOperationException("Forbidden.");
+            if (attempt.SubmittedAtUtc != null) return;
+
+            var quiz = attempt.Quiz;
+            if (!quiz.ActiveUntilUtc.HasValue) throw new InvalidOperationException("Quiz has no end time.");
+            if (DateTime.UtcNow > quiz.ActiveUntilUtc.Value) throw new InvalidOperationException("Time is up.");
+
+            // Load quiz questions in order
+            var questionIds = await _questionRepository.GetOrderedQuestionsAsync(quiz.Id, ct);
+
+            var questions = await _questionRepository.GetAllAsync(questionIds, ct);
+
+            var answers = await _studentAnswerRepository.GetAllAsync(attemptId, ct);
+            
+            int maxScore = 0;
+            int score = 0;
+
+            foreach (var qid in questionIds)
+            {
+                var q = questions[qid];
+                maxScore += q.Points;
+
+                var a = answers.FirstOrDefault(x => x.QuestionId == qid);
+                if (a == null) continue;
+
+                var awarded = 0;
+
+                if (q.Type == QuestionType.MultipleChoice)
+                {
+                    if (!string.IsNullOrEmpty(q.CorrectOptionId) &&
+                        a.SelectedOptionId == q.CorrectOptionId)
+                        awarded = q.Points;
+                }
+                else if (q.Type == QuestionType.Numeric)
+                {
+                    if (q.CorrectNumeric.HasValue && a.NumericValue.HasValue)
+                    {
+                        var tol = q.NumericTolerance ?? 0m;
+                        if (Math.Abs(a.NumericValue.Value - q.CorrectNumeric.Value) <= tol)
+                            awarded = q.Points;
+                    }
+                }
+                // ShortText: keep 0 for now (later add review workflow)
+
+                a.AwardedPoints = awarded;
+                score += awarded;
+            }
+
+            attempt.Score = score;
+            attempt.MaxScore = maxScore;
+            attempt.SubmittedAtUtc = DateTime.UtcNow;
+
+            await _attemptRepository.Submit(attempt, ct);
+        }
     }
 }

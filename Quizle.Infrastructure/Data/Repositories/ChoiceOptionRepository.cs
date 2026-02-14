@@ -9,7 +9,7 @@ namespace Quizle.Infrastructure.Data.Repositories
 
         public ChoiceOptionRepository(ApplicationDbContext db) => _db = db;
 
-        public async Task<bool> BelongsToQuestion(string questionId, string choiceOptId, CancellationToken ct)
-            => await _db.ChoiceOptions.AnyAsync(co => co.QuestionId == questionId && co.Id == choiceOptId, ct);
+        public Task<bool> BelongsToQuestion(string questionId, string choiceOptId, CancellationToken ct)
+            => _db.ChoiceOptions.AnyAsync(co => co.QuestionId == questionId && co.Id == choiceOptId, ct);
     }
 }

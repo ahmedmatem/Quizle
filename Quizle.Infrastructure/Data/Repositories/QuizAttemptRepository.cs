@@ -18,7 +18,10 @@ namespace Quizle.Infrastructure.Data.Repositories
         public Task<QuizAttempt?> GetAsync(string quizId, string studentId, CancellationToken ct)
             => _db.QuizAttempts.FirstOrDefaultAsync(x => x.QuizId == quizId && x.StudentId == studentId, ct);
 
-        public async Task<QuizAttempt?> GetWithQuizAsync(string attemptId, CancellationToken ct)
-            => await _db.QuizAttempts.Include(x => x.Quiz).FirstOrDefaultAsync(x => x.Id == attemptId, ct);
+        public Task<QuizAttempt?> GetWithQuizAsync(string attemptId, CancellationToken ct)
+            => _db.QuizAttempts.Include(x => x.Quiz).FirstOrDefaultAsync(x => x.Id == attemptId, ct);
+
+        public Task<int> Submit(QuizAttempt attempt, CancellationToken ct)
+            => _db.SaveChangesAsync(ct);
     }
 }

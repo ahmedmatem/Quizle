@@ -11,10 +11,13 @@ namespace Quizle.Infrastructure.Data.Repositories
 
         public StudentAnswerRepository(ApplicationDbContext db) => _db = db;
 
-        public async Task<StudentAnswer?> ExistingAnswerAsync(string attemptId, string questionId, CancellationToken ct)
-            => await _db.StudentAnswers
+        public Task<StudentAnswer?> ExistingAnswerAsync(string attemptId, string questionId, CancellationToken ct)
+            => _db.StudentAnswers
             .AsNoTracking()
             .FirstOrDefaultAsync(sa => sa.QuizAttemptId == attemptId && sa.QuestionId == questionId, ct);
+
+        public Task<List<StudentAnswer>> GetAllAsync(string attemptId, CancellationToken ct)
+            => _db.StudentAnswers.Where(sa => sa.QuizAttemptId == attemptId).ToListAsync(ct);
 
         public async Task Upsert(SaveAnswerDto answerDto, CancellationToken ct)
         {
