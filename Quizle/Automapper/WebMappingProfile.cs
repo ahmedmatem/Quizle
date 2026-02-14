@@ -8,7 +8,8 @@ namespace Quizle.Web.Automapper
     {
         protected WebMappingProfile()
         {
-            CreateMap<SaveAnswerReq, SaveAnswerDto>().ReverseMap();
+            CreateMap<SaveAnswerDto, SaveAnswerReq>().ReverseMap();
+            CreateMap<SolveQuestionDto, SolveQuestionVm>().ReverseMap();
         }
     }
 }

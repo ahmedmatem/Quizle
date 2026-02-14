@@ -43,7 +43,8 @@ namespace Quizle.Web.Areas.Student.Controllers
         [HttpGet]
         public async Task<IActionResult> Solve(string attemptId, int index = 0, CancellationToken ct = default)
         {
-            var vm = await _service.GetSolveVmAsync(attemptId, index, ct);
+            var solveDto = await _service.GetSolveAsync(attemptId, index, ct);
+            var vm = _mapper.Map<SolveQuestionVm>(solveDto);
             return View(vm);
         }
 

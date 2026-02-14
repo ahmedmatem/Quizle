@@ -30,7 +30,7 @@ namespace Quizle.Core.Services
             _choiceOptionRepository = choiceOptionRepository;
         }
 
-        public async Task<SolveQuestionDto> GetSolveVmAsync(string attemptId, int index, CancellationToken ct)
+        public async Task<SolveQuestionDto> GetSolveAsync(string attemptId, int index, CancellationToken ct)
         {
             var attempt = await _attemptRepository.GetWithQuizAsync(attemptId, ct);
 
