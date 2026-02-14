@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quizle.Core.Contracts;
 using Quizle.Core.Entities;
+using Quizle.Core.Services;
 using Quizle.Infrastructure.Data;
 using Quizle.Infrastructure.Data.Repositories;
 
@@ -17,6 +18,9 @@ namespace Quizle.Web
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IStudentAnswerRepository, StudentAnswerRepository>();
             services.AddScoped<IChoiceOptionRepository, ChoiceOptionRepository>();
+
+            // Register services
+            services.AddScoped<IStudentAttemptService, StudentAttemptService>();
 
             return services;
         }
