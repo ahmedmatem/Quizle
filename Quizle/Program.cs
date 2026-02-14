@@ -1,7 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-using Quizle.Core.Entities;
-using Quizle.Infrastructure.Data;
+using Microsoft.AspNetCore.Mvc;
 using Quizle.Web;
+using Quizle.Web.Automapper;
 
 namespace Quizle
 {
@@ -15,7 +14,14 @@ namespace Quizle
             builder.Services.AddApplicationDbContext(builder.Configuration);
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddApplicationIdentity();
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                // Global antiforgery validation for unsafe methods
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+
+            builder.Services.AddAutoMapper(typeof(WebMappingProfile).Assembly);
+
             builder.Services.AddApplicationServices();
 
             var app = builder.Build();
