@@ -1,4 +1,5 @@
-﻿using Quizle.Core.Entities;
+﻿using Quizle.Core.Dtos;
+using Quizle.Core.Entities;
 
 namespace Quizle.Core.Contracts
 {
@@ -6,5 +7,6 @@ namespace Quizle.Core.Contracts
     {
         public Task<Quiz?> GetByIdAsync(string id, CancellationToken ct);
         public Task<Quiz?> GetReadOnlyByIdAsync(string id, CancellationToken ct);
+        public Task<List<QuizDto>> GetActiveGroupQuizzesForStudentAsync(string studentId, CancellationToken ct);
     }
 }

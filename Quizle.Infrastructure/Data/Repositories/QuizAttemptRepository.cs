@@ -18,6 +18,15 @@ namespace Quizle.Infrastructure.Data.Repositories
         public Task<QuizAttempt?> GetAsync(string quizId, string studentId, CancellationToken ct)
             => _db.QuizAttempts.FirstOrDefaultAsync(x => x.QuizId == quizId && x.StudentId == studentId, ct);
 
+        public Task<List<QuizAttempt>> GetInRangeAsync(ICollection<string> quizIds, string studentId, CancellationToken ct)
+        {
+            return _db.QuizAttempts
+                .AsNoTracking()
+                .Where(a => a.StudentId == studentId && 
+                            quizIds.Contains(a.QuizId))
+                .ToListAsync(ct);
+        }
+
         public Task<QuizAttempt?> GetWithQuizAsync(string attemptId, CancellationToken ct)
             => _db.QuizAttempts.Include(x => x.Quiz).FirstOrDefaultAsync(x => x.Id == attemptId, ct);
 

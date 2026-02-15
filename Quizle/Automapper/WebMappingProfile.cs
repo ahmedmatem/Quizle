@@ -10,6 +10,7 @@ namespace Quizle.Web.Automapper
         {
             CreateMap<SaveAnswerDto, SaveAnswerReq>().ReverseMap();
             CreateMap<SolveQuestionDto, SolveQuestionVm>().ReverseMap();
+            CreateMap<QuizDto, ActiveQuizCardVm>().ReverseMap();
         }
     }
 }
