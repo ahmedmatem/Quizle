@@ -43,8 +43,12 @@ namespace Quizle
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            //app.MapControllerRoute(
+            //    name: "areas",
+            //    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
             app.MapAreaControllerRoute(
                 name: "Teacher",
                 areaName: "Teacher",
@@ -53,6 +57,7 @@ namespace Quizle
                 name: "Student",
                 areaName: "Student",
                 pattern: "student/{controller=Home}/{action=Index}/{id?}");
+
             app.MapDefaultControllerRoute();
             app.MapRazorPages();
 

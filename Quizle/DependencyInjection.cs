@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Quizle.Core.Contracts;
 using Quizle.Core.Entities;
 using Quizle.Core.Services;
@@ -43,6 +44,7 @@ namespace Quizle.Web
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
             })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             return services;

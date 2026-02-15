@@ -36,7 +36,7 @@ namespace Quizle.Web.Areas.Student.Controllers
             catch (Exception ex)
             {
                 TempData["Error"] = ex.Message;
-                return RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Index", "Dashboard", new { area = "Student" });
             }
         }
 
