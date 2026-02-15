@@ -8,24 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Student\**" />
-    <Compile Remove="Areas\Teacher\**" />
-    <EmbeddedResource Remove="Areas\Student\**" />
-    <EmbeddedResource Remove="Areas\Teacher\**" />
-    <None Remove="Areas\Student\**" />
-    <None Remove="Areas\Teacher\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Areas\Student\Controllers\AttemptsController.cs" />
-    <Compile Include="Areas\Student\Controllers\DashboardController.cs" />
-    <Compile Include="Areas\Student\Models\OptionVm.cs" />
-    <Compile Include="Areas\Student\Models\SaveAnswerReq.cs" />
-    <Compile Include="Areas\Student\Models\SolveQuestionVm.cs" />
-    <Compile Include="Areas\Student\Models\StudentDashboardVm.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.23" />
@@ -40,18 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Quizle.Core\Quizle.Core.csproj" />
     <ProjectReference Include="..\Quizle.Infrastructure\Quizle.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Student\Data\" />
-    <Folder Include="Areas\Student\Views\Shared\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Areas\Student\Views\Attempts\Solve.cshtml" />
-    <None Include="Areas\Student\Views\Dashboard\Index.cshtml" />
-    <None Include="Areas\Student\Views\_ViewImports.cshtml" />
-    <None Include="Areas\Student\Views\_ViewStart.cshtml" />
   </ItemGroup>
 
 </Project>
