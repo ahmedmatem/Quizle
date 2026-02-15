@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Quizle-07885a5f-c409-4af3-b731-91d29ee75b82</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Student\**" />
+    <Compile Remove="Areas\Teacher\**" />
+    <EmbeddedResource Remove="Areas\Student\**" />
+    <EmbeddedResource Remove="Areas\Teacher\**" />
+    <None Remove="Areas\Student\**" />
+    <None Remove="Areas\Teacher\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Areas\Student\Controllers\AttemptsController.cs" />
+    <Compile Include="Areas\Student\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Student\Models\OptionVm.cs" />
+    <Compile Include="Areas\Student\Models\SaveAnswerReq.cs" />
+    <Compile Include="Areas\Student\Models\SolveQuestionVm.cs" />
+    <Compile Include="Areas\Student\Models\StudentDashboardVm.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.23" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.23" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.23" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.23" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.23" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.23" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Quizle.Core\Quizle.Core.csproj" />
+    <ProjectReference Include="..\Quizle.Infrastructure\Quizle.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Student\Data\" />
+    <Folder Include="Areas\Student\Views\Shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Student\Views\Attempts\Solve.cshtml" />
+    <None Include="Areas\Student\Views\Dashboard\Index.cshtml" />
+    <None Include="Areas\Student\Views\_ViewImports.cshtml" />
+    <None Include="Areas\Student\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+
+</Project>
