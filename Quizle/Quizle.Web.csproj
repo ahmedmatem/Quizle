@@ -51,6 +51,7 @@
 
   <ItemGroup>
     <None Include="Areas\Student\Views\Attempts\Solve.cshtml" />
+    <None Include="Areas\Student\Views\Dashboard\Index.cshtml" />
     <None Include="Areas\Student\Views\_ViewImports.cshtml" />
   </ItemGroup>
 
