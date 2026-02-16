@@ -46,17 +46,17 @@ namespace Quizle
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "areas",
-                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
-            //app.MapAreaControllerRoute(
-            //    name: "Teacher",
-            //    areaName: "Teacher",
-            //    pattern: "teacher/{controller=Home}/{action=Index}/{id?}");
-            //app.MapAreaControllerRoute(
-            //    name: "Student",
-            //    areaName: "Student",
-            //    pattern: "student/{controller=Dashboard}/{action=Index}/{id?}");
+            //app.MapControllerRoute(
+            //    name: "areas",
+            //    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+            app.MapAreaControllerRoute(
+                name: "Teacher",
+                areaName: "Teacher",
+                pattern: "teacher/{controller=Home}/{action=Index}/{id?}");
+            app.MapAreaControllerRoute(
+                name: "Student",
+                areaName: "Student",
+                pattern: "student/{controller=Dashboard}/{action=Index}/{id?}");
 
             app.MapDefaultControllerRoute();
             app.MapRazorPages();
