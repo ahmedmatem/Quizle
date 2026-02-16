@@ -22,7 +22,7 @@ namespace Quizle.Web
 
             // Register services
             services.AddScoped<IStudentAttemptService, StudentAttemptService>();
-            services.AddScoped<IStudentDashboardService, StudentDashboardService>();
+            services.AddScoped<IStudentDashboardService,  StudentDashboardService>();
 
             return services;
         }
