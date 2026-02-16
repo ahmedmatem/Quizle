@@ -10,6 +10,9 @@ namespace Quizle.Core.Entities
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
+        public string CreatedByUserId { get; set; } = null!;
+
+        [Required]
         public string Text { get; set; } = null!;
 
         public QuestionType Type { get; set; }
