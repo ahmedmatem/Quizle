@@ -14,11 +14,16 @@ namespace Quizle.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(
+            SignInManager<ApplicationUser> signInManager, 
+            UserManager<ApplicationUser> userManager,
+            ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -108,8 +113,25 @@ namespace Quizle.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    if (user == null) return LocalRedirect(returnUrl);
+
+                    // If user came from a protected page, usually respect it
+                    if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl) && returnUrl != "/")
+                        return LocalRedirect(returnUrl);
+
+                    // Role-based default landing pages
+                    if (await _userManager.IsInRoleAsync(user, "Student"))
+                        return RedirectToAction("Index", "Dashboard", new { area = "Student" });
+
+                    if (await _userManager.IsInRoleAsync(user, "Teacher"))
+                        return RedirectToAction("Index", "Dashboard", new { area = "Teacher" });
+
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                        return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect(returnUrl);    // fallback
                 }
                 if (result.RequiresTwoFactor)
                 {
