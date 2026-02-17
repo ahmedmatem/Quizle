@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Quizle.Core.Dtos;
 using Quizle.Web.Areas.Student.Models;
+using Quizle.Web.Areas.Teacher.Models;
 
 namespace Quizle.Web.Automapper
 {
@@ -8,9 +9,15 @@ namespace Quizle.Web.Automapper
     {
         public WebMappingProfile()
         {
+            // student-dashboard mappings
             CreateMap<SaveAnswerDto, SaveAnswerReq>().ReverseMap();
             CreateMap<SolveQuestionDto, SolveQuestionVm>().ReverseMap();
             CreateMap<QuizDto, ActiveQuizCardVm>().ReverseMap();
+
+            // teacher-group mappings
+            CreateMap<GroupListItemDto, GroupListItemVm>().ReverseMap();
+            CreateMap<GroupDetailsDto, GroupDetailsVm>().ReverseMap();
+            CreateMap<CreateGroupDto, CreateGroupVm>().ReverseMap();
         }
     }
 }
