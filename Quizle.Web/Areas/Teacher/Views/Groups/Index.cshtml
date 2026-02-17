@@ -1,0 +1,56 @@
+﻿@model List<Quizle.Web.Areas.Teacher.Models.GroupListItemVm>
+@{
+    ViewData["Title"] = "My Groups";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">My Groups</h3>
+    <a class="btn btn-primary" asp-area="Teacher" asp-controller="Groups" asp-action="Create">Create Group</a>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-secondary">No groups yet.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th class="text-center">Students</th>
+                    <th class="text-center">Quizzes</th>
+                    <th class="text-end"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var g in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@g.Name</td>
+                        <td class="text-muted">@g.Description</td>
+                        <td class="text-center">@g.StudentsCount</td>
+                        <td class="text-center">@g.QuizzesCount</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary"
+                               asp-area="Teacher" asp-controller="Groups" asp-action="Details" asp-route-id="@g.Id">
+                                Details
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
