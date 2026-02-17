@@ -21,6 +21,7 @@ namespace Quizle.Web
             services.AddScoped<IChoiceOptionRepository, ChoiceOptionRepository>();
 
             // Register services
+            services.AddScoped<ITeacherGroupService, TeacherGroupService>();
             services.AddScoped<IStudentAttemptService, StudentAttemptService>();
             services.AddScoped<IStudentDashboardService,  StudentDashboardService>();
 
