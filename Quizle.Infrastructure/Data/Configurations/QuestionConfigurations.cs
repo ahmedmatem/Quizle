@@ -13,6 +13,7 @@ namespace Quizle.Infrastructure.Data.Configurations
                 .WithMany() // няма обратна навигация (важно)
                 .HasForeignKey(q => q.CorrectOptionId)
                 .OnDelete(DeleteBehavior.NoAction);
+
             builder
                 .HasOne(q => q.CreatedByUser)
                 .WithMany()
