@@ -18,6 +18,7 @@ namespace Quizle.Core.Entities
         public string? Description { get; set; }
 
         // Navigation properties
+        public ApplicationUser Teacher { get; set; } = null!;
 
         public ICollection<ApplicationUser> Students { get; set; } = [];
 

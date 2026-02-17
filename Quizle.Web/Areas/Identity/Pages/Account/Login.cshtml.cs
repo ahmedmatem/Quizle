@@ -125,7 +125,7 @@ namespace Quizle.Areas.Identity.Pages.Account
                         return RedirectToAction("Index", "Dashboard", new { area = "Student" });
 
                     if (await _userManager.IsInRoleAsync(user, "Teacher"))
-                        return RedirectToAction("Index", "Dashboard", new { area = "Teacher" });
+                        return RedirectToAction("Index", "Groups", new { area = "Teacher" });
 
                     if (await _userManager.IsInRoleAsync(user, "Admin"))
                         return RedirectToAction("Index", "Dashboard", new { area = "Admin" });

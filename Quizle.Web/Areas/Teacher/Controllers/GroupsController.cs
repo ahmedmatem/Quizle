@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Quizle.Core.Contracts;
 using Quizle.Core.Dtos;
-using Quizle.Core.Services;
 using Quizle.Web.Areas.Teacher.Models;
 using System.Security.Claims;
 
@@ -12,12 +12,12 @@ namespace Quizle.Web.Areas.Teacher.Controllers
     [Authorize(Roles = "Teacher")]
     public class GroupsController : Controller
     {
-        private readonly TeacherGroupService _service;
+        private readonly ITeacherGroupService _service;
         private readonly IMapper _mapper;
 
         private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-        public GroupsController(TeacherGroupService service, IMapper mapper)
+        public GroupsController(ITeacherGroupService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;

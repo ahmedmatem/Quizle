@@ -11,6 +11,12 @@ namespace Quizle.Infrastructure.Data.Configurations
             builder
                 .HasIndex(a => new { a.QuizId, a.StudentId })
                 .IsUnique();
+
+            builder
+                .HasOne(a => a.Student)
+                .WithMany(u => u.QuizAttempts)
+                .HasForeignKey(a => a.StudentId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

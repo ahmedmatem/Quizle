@@ -30,6 +30,8 @@ namespace Quizle.Core.Entities
 
         // Navigation properties
 
+        public ApplicationUser CreatedByUser { get; set; } = null!;
+
         public ICollection<QuizQuestion> QuizQuestions { get; set; } = [];
 
         public ICollection<ChoiceOption> Options { get; set; } = [];

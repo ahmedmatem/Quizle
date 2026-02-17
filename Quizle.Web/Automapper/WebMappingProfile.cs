@@ -18,6 +18,7 @@ namespace Quizle.Web.Automapper
             CreateMap<GroupListItemDto, GroupListItemVm>().ReverseMap();
             CreateMap<GroupDetailsDto, GroupDetailsVm>().ReverseMap();
             CreateMap<CreateGroupDto, CreateGroupVm>().ReverseMap();
+            CreateMap<StudentRowDto, StudentRowVm>().ReverseMap();
         }
     }
 }

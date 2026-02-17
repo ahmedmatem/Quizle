@@ -14,6 +14,12 @@ namespace Quizle.Infrastructure.Data.Configurations
         public void Configure(EntityTypeBuilder<SchoolGroup> builder)
         {
             builder
+                .HasOne(g => g.Teacher)
+                .WithMany()
+                .HasForeignKey(g => g.TeacherId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
                 .HasMany(g => g.Students)
                 .WithMany(u => u.GroupStudents)
                 .UsingEntity<Dictionary<string, object>>(
