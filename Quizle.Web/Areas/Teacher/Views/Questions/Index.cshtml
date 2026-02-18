@@ -1,0 +1,85 @@
+﻿@model QuestionIndexVm
+@using Quizle.Core.Types
+
+@{
+    ViewData["Title"] = "Questions";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">My Questions</h3>
+    <a class="btn btn-primary" asp-area="Teacher" asp-controller="Questions" asp-action="Create">Create</a>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-12 col-md-6">
+        <input class="form-control" name="search" value="@Model.Search" placeholder="Search text..." />
+    </div>
+    <div class="col-12 col-md-4">
+        <select class="form-select" name="type">
+            <option value="">All types</option>
+            <option value="@QuestionType.MultipleChoice" selected="@(Model.Type == QuestionType.MultipleChoice)">MultipleChoice</option>
+            <option value="@QuestionType.Numeric" selected="@(Model.Type == QuestionType.Numeric)">Numeric</option>
+            <option value="@QuestionType.ShortText" selected="@(Model.Type == QuestionType.ShortText)">ShortText</option>
+        </select>
+    </div>
+    <div class="col-12 col-md-2">
+        <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
+    </div>
+</form>
+
+@if (!Model.Items.Any())
+{
+    <div class="alert alert-secondary">No questions found.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Text</th>
+                    <th>Type</th>
+                    <th class="text-center">Pts</th>
+                    <th class="text-center">Options</th>
+                    <th class="text-end"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var q in Model.Items)
+                {
+                    <tr>
+                        <td class="fw-semibold">@q.Text</td>
+                        <td>@q.Type</td>
+                        <td class="text-center">@q.Points</td>
+                        <td class="text-center">@q.OptionsCount</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary"
+                               asp-area="Teacher" asp-controller="Questions" asp-action="Edit" asp-route-id="@q.Id">
+                                Edit
+                            </a>
+
+                            <form method="post" asp-area="Teacher" asp-controller="Questions" asp-action="Delete"
+                                  class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@q.Id" />
+                                <button class="btn btn-sm btn-outline-danger" type="submit"
+                                        onclick="return confirm('Delete this question?');">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
