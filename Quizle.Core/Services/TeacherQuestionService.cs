@@ -19,7 +19,7 @@ namespace Quizle.Core.Services
         {
             Validate(dto);
 
-            var question = new Question
+            var q = new Question
             {
                 Id = Guid.NewGuid().ToString(),
                 CreatedByUserId = teacherId,
@@ -28,19 +28,22 @@ namespace Quizle.Core.Services
                 Type = dto.Type,
                 CorrectNumeric = dto.Type == QuestionType.Numeric ? dto.CorrectNumeric : null,
                 NumericTolerance = dto.Type == QuestionType.Numeric ? dto.NumericTolerance : null,
+
+                // IMPORTANT: do NOT set CorrectOptionId here
+                CorrectOptionId = null
             };
 
-            await _questionRepository.AddAsync(question, ct);
+            await _questionRepository.AddAsync(q, ct);
+            await _questionRepository.SaveChangesAsync(ct); // 1) Question exists
 
             if (dto.Type == QuestionType.MultipleChoice)
             {
-                // build options
                 var options = dto.Options
                     .Where(o => !string.IsNullOrWhiteSpace(o.Text))
                     .Select(o => new ChoiceOption
                     {
                         Id = Guid.NewGuid().ToString(),
-                        QuestionId = question.Id,
+                        QuestionId = q.Id,
                         Text = o.Text.Trim()
                     })
                     .ToList();
@@ -51,25 +54,18 @@ namespace Quizle.Core.Services
                 if (!dto.CorrectIndex.HasValue || dto.CorrectIndex < 0 || dto.CorrectIndex >= options.Count)
                     throw new InvalidOperationException("Choose correct option.");
 
-                // attach to navigation (optional but nice)
-                question.Options = options;
+                await _questionRepository.AddOptionsAsync(options, ct);
+                await _questionRepository.SaveChangesAsync(ct); // 2) Options exist
 
-                // set CorrectOptionId (IDs already exist because we generated them)
-                question.CorrectOptionId = options[dto.CorrectIndex.Value].Id;
+                // 3) set correct FK after options exist
+                q.CorrectOptionId = options[dto.CorrectIndex.Value].Id;
+                await _questionRepository.SaveChangesAsync(ct);
             }
 
-            await _questionRepository.AddAsync(question, ct);
-
-            // If you don't rely on question.Options cascade insert, add options explicitly:
-            // if (vm.Type == QuestionType.MultipleChoice)
-            //     await _questions.AddOptionsAsync(question.Options, ct);
-
-            await _questionRepository.SaveChangesAsync(ct);
-
-            return question.Id;
+            return q.Id;
         }
 
-        public async Task<QuestionEditDto> GetForEditAsync(string id, string teacherId, CancellationToken ct)
+        public async Task<QuestionEditDto> GetForEditAsync(string teacherId, string id, CancellationToken ct)
         {
             var q = await _questionRepository.GetIncludeOptionsAsync(id, teacherId, ct);
 

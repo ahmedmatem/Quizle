@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Quizle.Core.Contracts;
 using Quizle.Core.Dtos;
 using Quizle.Core.Services;
 using Quizle.Core.Types;
@@ -10,16 +11,16 @@ using System.Security.Claims;
 namespace Quizle.Web.Areas.Teacher.Controllers
 {
     [Area("Teacher")]
-    [Authorize("Teacher")]
+    [Authorize(Roles = "Teacher")]
     public class QuestionsController : Controller
     {
-        private readonly TeacherQuestionService _service;
+        private readonly ITeacherQuestionService _service;
         private readonly IMapper _mapper;
 
         private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
         public QuestionsController(
-            TeacherQuestionService service,
+            ITeacherQuestionService service,
             IMapper mapper)
         {
             _service = service;
