@@ -19,6 +19,8 @@ namespace Quizle.Web.Automapper
             CreateMap<GroupDetailsDto, GroupDetailsVm>().ReverseMap();
             CreateMap<CreateGroupDto, CreateGroupVm>().ReverseMap();
             CreateMap<StudentRowDto, StudentRowVm>().ReverseMap();
+
+            // teachers-questions mappings
         }
     }
 }
