@@ -12,6 +12,7 @@ namespace Quizle.Web.Automapper
             // student-dashboard mappings
             CreateMap<SaveAnswerDto, SaveAnswerReq>().ReverseMap();
             CreateMap<SolveQuestionDto, SolveQuestionVm>().ReverseMap();
+            CreateMap<OptionDto, OptionVm>().ReverseMap();
             CreateMap<QuizDto, ActiveQuizCardVm>().ReverseMap();
 
             // teacher-group mappings
@@ -21,6 +22,10 @@ namespace Quizle.Web.Automapper
             CreateMap<StudentRowDto, StudentRowVm>().ReverseMap();
 
             // teachers-questions mappings
+            CreateMap<QuestionEditDto, QuestionEditVm>().ReverseMap();
+            CreateMap<QuestionIndexDto, QuestionIndexVm>().ReverseMap();
+            CreateMap<QuestionListItemDto, QuestionListItemVm>().ReverseMap();
+            CreateMap<OptionInputDto, OptionInputVm>().ReverseMap();
         }
     }
 }
