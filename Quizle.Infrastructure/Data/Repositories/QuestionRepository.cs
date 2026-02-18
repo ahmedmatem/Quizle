@@ -26,5 +26,29 @@ namespace Quizle.Infrastructure.Data.Repositories
         public Task<Dictionary<string, Question>> GetAllAsync(List<string> questionIds, CancellationToken ct)
             => _db.Questions.Where(q => questionIds.Contains(q.Id))
                 .ToDictionaryAsync(q => q.Id, ct);
+
+        public IQueryable<Question> GetByCreator(string creatorId)
+            => _db.Questions.AsNoTracking().Where(q => q.CreatedByUserId == creatorId);
+
+        public Task<Question?> GetIncludeOptionsAsync(string qId, string creatorId, CancellationToken ct)
+            => _db.Questions.Include(q => q.Options).FirstOrDefaultAsync(q => q.Id == qId && q.CreatedByUserId == creatorId, ct);
+
+        public Task AddAsync(Question question, CancellationToken ct)
+        => _db.Questions.AddAsync(question, ct).AsTask();
+
+        public Task AddOptionsAsync(IEnumerable<ChoiceOption> options, CancellationToken ct)
+            => _db.ChoiceOptions.AddRangeAsync(options, ct);
+
+        public void RemoveChoiceOption(ChoiceOption option) => _db.ChoiceOptions.Remove(option);
+
+        public void AddChoiceOption(ChoiceOption option) => _db.ChoiceOptions.Add(option);
+
+        public Task SaveChangesAsync(CancellationToken ct)
+            => _db.SaveChangesAsync(ct);
+
+        public Task<Question?> GetAsync(string questionId, string creatorId, CancellationToken ct)
+            => _db.Questions.FirstOrDefaultAsync(q => q.Id == questionId && q.CreatedByUserId == creatorId, ct);
+
+        public void Remove(Question question) => _db.Remove(question);
     }
 }
