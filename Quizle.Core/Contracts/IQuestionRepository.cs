@@ -1,9 +1,15 @@
-﻿using Quizle.Core.Entities;
+﻿using Quizle.Core.Dtos;
+using Quizle.Core.Entities;
+using Quizle.Core.Types;
 
 namespace Quizle.Core.Contracts
 {
     public interface IQuestionRepository
     {
+        /// <summary>Returns teacher's questions for the bank (filtered, limited).</summary>
+        Task<List<QuestionBankRowDto>> GetBankAsync( string teacherId, string? search, QuestionType? type, int take, CancellationToken ct);
+        /// <summary>Ownership check (must be teacher's question).</summary>
+        Task<bool> IsOwnedByTeacherAsync(string questionId, string teacherId, CancellationToken ct);
         Task<Question> GetWithOptionsAsync(string questionId, CancellationToken ct);
         Task<List<string>> GetOrderedQuestionsAsync(string quizId, CancellationToken ct);
         Task<bool> BelongsToQuizAsync(string quizId, string questionId, CancellationToken ct);
