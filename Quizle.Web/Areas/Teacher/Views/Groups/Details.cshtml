@@ -3,12 +3,21 @@
     ViewData["Title"] = "Group Details";
 }
 
-<div class="d-flex justify-content-between align-items-start mb-3">
-    <div>
-        <h3 class="mb-1">@Model.Name</h3>
-        <div class="text-muted">@Model.Description</div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">@Model.Name</h3>
+    <div class="text-muted">@Model.Description</div>
+
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary"
+           asp-area="Teacher" asp-controller="Quizzes" asp-action="Index" asp-route-groupId="@Model.Id">
+            Quizzes
+        </a>
+
+        <a class="btn btn-outline-secondary"
+           asp-area="Teacher" asp-controller="Groups" asp-action="Index">
+            Back
+        </a>
     </div>
-    <a class="btn btn-outline-secondary" asp-area="Teacher" asp-controller="Groups" asp-action="Index">Back</a>
 </div>
 
 @if (TempData["Error"] != null)

@@ -1,0 +1,141 @@
+﻿@model QuizBuilderVm
+@using Quizle.Core.Types
+
+@{
+    ViewData["Title"] = "Quiz Builder";
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h3 class="mb-1">@Model.QuizTitle</h3>
+        <div class="text-muted">
+            Status: <strong>@Model.Status</strong> • Duration: <strong>@Model.DurationMinutes min</strong> • Total points: <strong>@Model.TotalPoints</strong>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<div class="row g-3">
+    <div class="col-12 col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Selected Questions (@Model.Selected.Count)</h5>
+
+                @if (!Model.Selected.Any())
+                {
+                    <div class="alert alert-secondary mb-0">No questions yet. Add from the bank →</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width:70px;">#</th>
+                                    <th>Question</th>
+                                    <th style="width:110px;">Type</th>
+                                    <th class="text-center" style="width:70px;">Pts</th>
+                                    <th class="text-end" style="width:210px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var q in Model.Selected)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@q.Order</td>
+                                        <td>@q.Text</td>
+                                        <td>@q.Type</td>
+                                        <td class="text-center">@q.Points</td>
+                                        <td class="text-end">
+                                            <form method="post" asp-area="Teacher" asp-controller="Quizzes" asp-action="MoveUp" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="quizId" value="@Model.QuizId" />
+                                                <input type="hidden" name="questionId" value="@q.QuestionId" />
+                                                <button class="btn btn-sm btn-outline-secondary" type="submit">↑</button>
+                                            </form>
+
+                                            <form method="post" asp-area="Teacher" asp-controller="Quizzes" asp-action="MoveDown" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="quizId" value="@Model.QuizId" />
+                                                <input type="hidden" name="questionId" value="@q.QuestionId" />
+                                                <button class="btn btn-sm btn-outline-secondary" type="submit">↓</button>
+                                            </form>
+
+                                            <form method="post" asp-area="Teacher" asp-controller="Quizzes" asp-action="RemoveQuestion" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="quizId" value="@Model.QuizId" />
+                                                <input type="hidden" name="questionId" value="@q.QuestionId" />
+                                                <button class="btn btn-sm btn-outline-danger" type="submit">Remove</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Question Bank</h5>
+
+                <form method="get" class="row g-2 mb-2">
+                    <input type="hidden" name="id" value="@Model.QuizId" />
+                    <div class="col-12">
+                        <input class="form-control" name="search" value="@Model.Search" placeholder="Search..." />
+                    </div>
+                    <div class="col-8">
+                        <select class="form-select" name="type">
+                            <option value="">All types</option>
+                            <option value="@QuestionType.MultipleChoice" selected="@(Model.Type == QuestionType.MultipleChoice)">MultipleChoice</option>
+                            <option value="@QuestionType.Numeric" selected="@(Model.Type == QuestionType.Numeric)">Numeric</option>
+                            <option value="@QuestionType.ShortText" selected="@(Model.Type == QuestionType.ShortText)">ShortText</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
+                    </div>
+                </form>
+
+                <div class="list-group">
+                    @foreach (var b in Model.Bank)
+                    {
+                        <div class="list-group-item d-flex justify-content-between align-items-start gap-2">
+                            <div>
+                                <div class="fw-semibold">@b.Text</div>
+                                <div class="small text-muted">@b.Type • @b.Points pts</div>
+                            </div>
+
+                            @if (b.AlreadyAdded)
+                            {
+                                <span class="badge text-bg-secondary">Added</span>
+                            }
+                            else
+                            {
+                                <form method="post" asp-area="Teacher" asp-controller="Quizzes" asp-action="AddQuestion">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="quizId" value="@Model.QuizId" />
+                                    <input type="hidden" name="questionId" value="@b.Id" />
+                                    <button class="btn btn-sm btn-primary" type="submit">Add</button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
