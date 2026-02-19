@@ -31,6 +31,8 @@ namespace Quizle.Web.Automapper
             CreateMap<QuizListItemDto, QuizListItemVm>().ReverseMap();
             CreateMap<QuizCreateDto, QuizCreateVm>().ReverseMap();
             CreateMap<QuizBuilderDto, QuizBuilderVm>().ReverseMap();
+            CreateMap<QuizQuestionRowDto, QuizQuestionRowVm>().ReverseMap();
+            CreateMap<QuestionBankRowDto, QuestionBankRowVm>().ReverseMap();
         }
     }
 }

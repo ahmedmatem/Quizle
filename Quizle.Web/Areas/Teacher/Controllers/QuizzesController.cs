@@ -31,9 +31,13 @@ namespace Quizle.Web.Areas.Teacher.Controllers
         {
             var items = await _service.GetQuizzesForGroupAsync(UserId, groupId, ct);
             ViewBag.GroupId = groupId;
-            var vm = _mapper.Map<QuizListItemVm>(items);
+            var vm = _mapper.Map<List<QuizListItemVm>>(items);
             return View(vm);
         }
+
+        [HttpGet]
+        public IActionResult Create(string groupId)
+        => View(new QuizCreateVm { SchoolGroupId = groupId });
 
         [HttpPost]
         public async Task<IActionResult> Create(QuizCreateVm vm, CancellationToken ct)
