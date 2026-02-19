@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quizle.Core.Contracts;
+using Quizle.Core.Dtos;
 using Quizle.Core.Entities;
+using Quizle.Core.Types;
+using static Quizle.Core.AppConstants;
 
 namespace Quizle.Infrastructure.Data.Repositories
 {
@@ -50,5 +53,38 @@ namespace Quizle.Infrastructure.Data.Repositories
             => _db.Questions.FirstOrDefaultAsync(q => q.Id == questionId && q.CreatedByUserId == creatorId, ct);
 
         public void Remove(Question question) => _db.Remove(question);
+
+        public Task<List<QuestionBankRowDto>> GetBankAsync(string creatorId, string? search, QuestionType? type, int take, CancellationToken ct)
+        {
+            var q = _db.Questions.AsNoTracking()
+                .Where(q => q.CreatedByUserId == creatorId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var s = search.Trim();
+                q = q.Where(q => q.Text.Contains(s));
+            }
+
+            if (type.HasValue)
+                q = q.Where(q => q.Type == type.Value);
+
+            if (take < 0) take = QuestionBankPageSizeDefault;
+
+            return q
+            .OrderByDescending(x => x.Id)
+            .Take(take)
+            .Select(x => new QuestionBankRowDto
+            {
+                Id = x.Id,
+                Text = x.Text,
+                Type = x.Type,
+                Points = x.Points,
+            })
+            .ToListAsync(ct);
+        }
+
+        public Task<bool> IsOwnedByTeacherAsync(string questionId, string creatorId, CancellationToken ct)
+            => _db.Questions.AsNoTracking()
+                .AnyAsync(q => q.Id == questionId && q.CreatedByUserId == creatorId);
     }
 }
