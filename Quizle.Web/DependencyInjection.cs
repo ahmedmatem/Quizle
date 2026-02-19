@@ -25,6 +25,7 @@ namespace Quizle.Web
             services.AddScoped<IStudentAttemptService, StudentAttemptService>();
             services.AddScoped<IStudentDashboardService,  StudentDashboardService>();
             services.AddScoped<ITeacherQuestionService, TeacherQuestionService>();
+            services.AddScoped<ITeacherQuizService, TeacherQuizService>();
 
             return services;
         }
