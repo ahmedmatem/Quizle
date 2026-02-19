@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Quizle.Infrastructure\Quizle.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Teacher\Data\" />
-  </ItemGroup>
-
 </Project>
