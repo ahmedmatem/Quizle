@@ -12,6 +12,17 @@ namespace Quizle.Infrastructure.Data.Repositories
 
         public QuizRepository(ApplicationDbContext db) => _db = db;
 
+        public async Task ActivateAsync(string quizId, DateTime fromUtc, DateTime untilUtc, CancellationToken ct)
+        {
+            var quiz = await _db.Quizzes.FirstOrDefaultAsync(q => q.Id == quizId, ct);
+            if (quiz == null) 
+                throw new InvalidOperationException("Quiz not found.");
+
+            quiz.Status = QuizStatus.Active;
+            quiz.ActiveFromUtc = fromUtc;
+            quiz.ActiveUntilUtc = untilUtc;
+        }
+
         public Task AddQuizAsync(Quiz quiz, CancellationToken ct)
             => _db.Quizzes.AddAsync(quiz, ct).AsTask();
 
@@ -25,6 +36,16 @@ namespace Quizle.Infrastructure.Data.Repositories
             };
 
             await _db.QuizQuestions.AddAsync(link, ct);
+        }
+
+        public async Task CloseAsync(string quizId, DateTime closedAtUtc, CancellationToken ct)
+        {
+            var quiz = await _db.Quizzes.FirstOrDefaultAsync(q => q.Id == quizId, ct);
+            if (quiz == null) 
+                throw new InvalidOperationException("Quiz not found.");
+
+            quiz.Status = QuizStatus.Closed;
+            quiz.ActiveUntilUtc = closedAtUtc; // optional but useful
         }
 
         public async Task CompactOrdersAsync(string quizId, CancellationToken ct)
@@ -115,6 +136,13 @@ namespace Quizle.Infrastructure.Data.Repositories
                 x.Question.Points
             ))
             .ToListAsync(ct);
+
+        public Task<QuizStatus?> GetStatusAsync(string quizId, CancellationToken ct)
+            => _db.Quizzes
+            .AsNoTracking()
+            .Where(q => q.Id == quizId)
+            .Select(q => (QuizStatus?)q.Status)
+            .FirstOrDefaultAsync(ct);
 
         public Task<bool> QuizHasQuestionAsync(string quizId, string questionId, CancellationToken ct)
             => _db.QuizQuestions
