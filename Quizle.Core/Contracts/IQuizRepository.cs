@@ -1,5 +1,6 @@
 ﻿using Quizle.Core.Dtos;
 using Quizle.Core.Entities;
+using Quizle.Core.Types;
 
 namespace Quizle.Core.Contracts
 {
@@ -33,5 +34,11 @@ namespace Quizle.Core.Contracts
 
         /// <summary>Compacts orders to 1..n after removal.</summary>
         Task CompactOrdersAsync(string quizId, CancellationToken ct);
+
+        Task<QuizStatus?> GetStatusAsync(string quizId, CancellationToken ct);
+
+        Task ActivateAsync(string quizId, DateTime fromUtc, DateTime untilUtc, CancellationToken ct);
+
+        Task CloseAsync(string quizId, DateTime closedAtUtc, CancellationToken ct);
     }
 }
