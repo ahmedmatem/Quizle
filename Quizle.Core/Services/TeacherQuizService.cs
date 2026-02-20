@@ -160,5 +160,51 @@ namespace Quizle.Core.Services
             if (status != QuizStatus.Draft)
                 throw new InvalidOperationException("Only Draft quizzes can be edited.");
         }
+
+        public async Task ActivateAsync(string teacherId, string quizId, CancellationToken ct)
+        {
+            // ownership
+            if (!await _quizzes.TeacherOwnsQuizAsync(teacherId, quizId, ct))
+                throw new InvalidOperationException("Access denied.");
+
+            var status = await _quizzes.GetStatusAsync(quizId, ct);
+            if (status is null) 
+                throw new InvalidOperationException("Quiz not found.");
+
+            if (status != QuizStatus.Draft && status != QuizStatus.Closed)
+                throw new InvalidOperationException("Only Draft/Closed quizzes can be activated.");
+
+            // optional: require at least 1 question
+            var selected = await _quizzes.GetSelectedQuestionsAsync(quizId, ct);
+            if (selected.Count == 0)
+                throw new InvalidOperationException("Add at least 1 question before activation.");
+
+            // duration comes from header
+            var header = await _quizzes.GetQuizHeaderAsync(teacherId, quizId, ct);
+            if (header == null) 
+                throw new InvalidOperationException("Quiz not found or access denied.");
+
+            var fromUtc = DateTime.UtcNow;
+            var untilUtc = fromUtc.AddMinutes(header.DurationMinutes);
+
+            await _quizzes.ActivateAsync(quizId, fromUtc, untilUtc, ct);
+            await _quizzes.SaveChangesAsync(ct);
+        }
+
+        public async Task CloseAsync(string teacherId, string quizId, CancellationToken ct)
+        {
+            if (!await _quizzes.TeacherOwnsQuizAsync(teacherId, quizId, ct))
+                throw new InvalidOperationException("Access denied.");
+
+            var status = await _quizzes.GetStatusAsync(quizId, ct);
+            if (status is null) 
+                throw new InvalidOperationException("Quiz not found.");
+
+            if (status != QuizStatus.Active)
+                throw new InvalidOperationException("Only Active quizzes can be closed.");
+
+            await _quizzes.CloseAsync(quizId, DateTime.UtcNow, ct);
+            await _quizzes.SaveChangesAsync(ct);
+        }
     }
 }
