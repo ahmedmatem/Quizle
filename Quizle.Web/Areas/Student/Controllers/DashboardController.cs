@@ -12,30 +12,40 @@ namespace Quizle.Web.Areas.Student.Controllers;
 public class DashboardController : Controller
 {
     private readonly IMapper _mapper;
-    private readonly IStudentDashboardService _dashboardService;
+    private readonly IStudentQuizService _service;
 
     public DashboardController(
         IMapper mapper,
-        IStudentDashboardService dashboardService)
+        IStudentQuizService service)
     {
         _mapper = mapper;
-        _dashboardService = dashboardService;
+        _service = service;
     }
+
+    private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken ct)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-
-        var quizzes = await _dashboardService.GetStudentDashboardActiveQuizzesAsync(userId, ct);
-
-        var vm = new StudentDashboardVm();
-
-        vm.ActiveQuizzes = quizzes
-                .Select(q => _mapper.Map<ActiveQuizCardVm>(q))
-                .ToList();
-        vm.Error = TempData["Error"] as string;
-
+        var dto = await _service.GetDashboardAsync(UserId, ct);
+        var vm = _mapper.Map<StudentDashboardVm>(dto);
         return View(vm);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Start(string quizId, CancellationToken ct)
+    {
+        try
+        {
+            var attemptId = await _service.StartOrResumeAsync(UserId, quizId, ct);
+            return RedirectToAction("Solve", "Attempts", new { area = "Student", attemptId });
+        }
+        catch (Exception ex)
+        {
+            var dto = await _service.GetDashboardAsync(UserId, ct);
+            var vm = _mapper.Map<StudentDashboardVm>(dto);
+            vm.Error = ex.Message;
+            return View("Index", vm);
+        }
     }
 }

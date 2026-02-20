@@ -13,7 +13,9 @@ namespace Quizle.Web.Automapper
             CreateMap<SaveAnswerDto, SaveAnswerReq>().ReverseMap();
             CreateMap<SolveQuestionDto, SolveQuestionVm>().ReverseMap();
             CreateMap<OptionDto, OptionVm>().ReverseMap();
-            CreateMap<QuizDto, ActiveQuizCardVm>().ReverseMap();
+            //CreateMap<QuizDto, ActiveQuizCardVm>().ReverseMap();
+            CreateMap<ActiveQuizCardDto, ActiveQuizCardVm>().ReverseMap();
+            CreateMap<StudentDashboardDto, StudentDashboardVm>().ReverseMap();
 
             // teacher-group mappings
             CreateMap<GroupListItemDto, GroupListItemVm>().ReverseMap();

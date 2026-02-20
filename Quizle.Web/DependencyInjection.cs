@@ -18,12 +18,14 @@ namespace Quizle.Web
             services.AddScoped<IQuizAttemptRepository, QuizAttemptRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IStudentAnswerRepository, StudentAnswerRepository>();
+            services.AddScoped<IStudentQuizRepository, StudentQuizRepository>();
             services.AddScoped<IChoiceOptionRepository, ChoiceOptionRepository>();
 
             // Register services
             services.AddScoped<ITeacherGroupService, TeacherGroupService>();
             services.AddScoped<IStudentAttemptService, StudentAttemptService>();
             services.AddScoped<IStudentDashboardService,  StudentDashboardService>();
+            services.AddScoped<IStudentQuizService,  StudentQuizService>();
             services.AddScoped<ITeacherQuestionService, TeacherQuestionService>();
             services.AddScoped<ITeacherQuizService, TeacherQuizService>();
 
