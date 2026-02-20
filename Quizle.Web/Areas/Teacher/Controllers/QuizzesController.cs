@@ -68,8 +68,9 @@ namespace Quizle.Web.Areas.Teacher.Controllers
         [HttpPost]
         public async Task<IActionResult> AddQuestion(string quizId, string questionId, CancellationToken ct)
         {
-            try { 
-                await _service.AddQuestionAsync(UserId, quizId, questionId, ct); 
+            try
+            {
+                await _service.AddQuestionAsync(UserId, quizId, questionId, ct);
             }
             catch (Exception ex) { TempData["Error"] = ex.Message; }
 
@@ -79,8 +80,9 @@ namespace Quizle.Web.Areas.Teacher.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveQuestion(string quizId, string questionId, CancellationToken ct)
         {
-            try {
-                await _service.RemoveQuestionAsync(UserId, quizId, questionId, ct); 
+            try
+            {
+                await _service.RemoveQuestionAsync(UserId, quizId, questionId, ct);
             }
             catch (Exception ex) { TempData["Error"] = ex.Message; }
 
@@ -90,8 +92,9 @@ namespace Quizle.Web.Areas.Teacher.Controllers
         [HttpPost]
         public async Task<IActionResult> MoveUp(string quizId, string questionId, CancellationToken ct)
         {
-            try { 
-                await _service.MoveAsync(UserId, quizId, questionId, -1, ct); 
+            try
+            {
+                await _service.MoveAsync(UserId, quizId, questionId, -1, ct);
             }
             catch (Exception ex) { TempData["Error"] = ex.Message; }
 
@@ -101,8 +104,35 @@ namespace Quizle.Web.Areas.Teacher.Controllers
         [HttpPost]
         public async Task<IActionResult> MoveDown(string quizId, string questionId, CancellationToken ct)
         {
-            try { 
+            try
+            {
                 await _service.MoveAsync(UserId, quizId, questionId, +1, ct);
+            }
+            catch (Exception ex) { TempData["Error"] = ex.Message; }
+
+            return RedirectToAction(nameof(Edit), new { id = quizId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Activate(string quizId, CancellationToken ct)
+        {
+            try
+            {
+                await _service.ActivateAsync(UserId, quizId, ct);
+                TempData["Success"] = "Quiz activated.";
+            }
+            catch (Exception ex) { TempData["Error"] = ex.Message; }
+
+            return RedirectToAction(nameof(Edit), new { id = quizId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Close(string quizId, CancellationToken ct)
+        {
+            try
+            {
+                await _service.CloseAsync(UserId, quizId, ct);
+                TempData["Success"] = "Quiz closed.";
             }
             catch (Exception ex) { TempData["Error"] = ex.Message; }
 
