@@ -4,6 +4,9 @@ namespace Quizle.Core.Contracts
 {
     public interface IStudentDashboardService
     {
-        Task<List<QuizDto>> GetStudentDashboardActiveQuizzesAsync(string studentId, CancellationToken ct);
+        Task<StudentDashboardDto> GetDashboardAsync(string studentId, CancellationToken ct);
+
+        /// returns attemptId (for redirect to Solve)
+        Task<string> StartOrResumeAsync(string studentId, string quizId, CancellationToken ct);
     }
 }

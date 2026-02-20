@@ -12,11 +12,11 @@ namespace Quizle.Web.Areas.Student.Controllers;
 public class DashboardController : Controller
 {
     private readonly IMapper _mapper;
-    private readonly IStudentQuizService _service;
+    private readonly IStudentDashboardService _service;
 
     public DashboardController(
         IMapper mapper,
-        IStudentQuizService service)
+        IStudentDashboardService service)
     {
         _mapper = mapper;
         _service = service;
